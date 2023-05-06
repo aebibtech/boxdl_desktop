@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./deps/bootstrap.min.css">
+        <script src="./deps/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="./style.css">
+        <script src="./frontend.js"></script>
+        <title>BoxDL</title>
+    </head>
+    <body>
+        <main class="container-fluid bg-dark text-light p-3">
+            <h1 class="mb-3 display-1"><samp>BoxDL</samp></h1>
+            <form style="height: 285px;">
+                <label class="form-label mb-3" for="links">Paste box.com links here (Separate by space or new line)</label>
+                <textarea class="mb-3 form-control resize-none h-50" name="links" id="links"></textarea>
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-secondary" type="submit" id="download-btn">Download</button>
+                    <a class="btn btn-link" id="open-folder">Open Downloads Folder</a>
+                </div>
+            </form>
+        </main>
+        <div style="font-size: small; padding-top: 3px; overflow: hidden;" class="bg-light text-dark" id="status">Ready.</div>
+    </body>
+</html>
