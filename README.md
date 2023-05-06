@@ -6,7 +6,8 @@ This application can scrape and download protected docx, pdf files in box.com an
 
 ### Installation
 #### Windows
-1. Go to the Releases section of this repo. Download the Windows version.
+1. Go to the [Releases](https://github.com/aebibtech/boxdl_desktop/releases) section of this repo.
+2. Download the one with the Setup.exe in the name.
 
 #### Debian/Ubuntu
 Coming soon...
