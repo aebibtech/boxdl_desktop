@@ -1,3 +1,5 @@
+if (require('electron-squirrel-startup')) return;
+
 const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const path = require('path');
 const puppeteer = require('puppeteer');
