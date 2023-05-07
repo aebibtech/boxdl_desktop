@@ -1,14 +1,18 @@
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function(event){
     const dlbtn = document.getElementById('download-btn');
     const openf = document.getElementById('open-folder');
     boxdl.waitStatus(document.getElementById('status'));
 
+    if(event.key === 'Enter'){
+        dlbtn.click();
+    }
+
     dlbtn.addEventListener('click', async function(event){
         event.preventDefault();
-        dlbtn.disabled = true;
+        dlbtn.toggleAttribute('disabled', true);
         const links = document.getElementById('links').value;
         await boxdl.download(links);
-        dlbtn.disabled = false;
+        dlbtn.toggleAttribute('disabled', false);
     });
 
     openf.addEventListener('click', function(event){
