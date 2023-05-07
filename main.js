@@ -6,12 +6,13 @@ const puppeteer = require('puppeteer');
 const { download } = require('electron-dl');
 
 let win = null;
+let downloading = false;
 
 function urlChecker(url){
     return /https:\/\/(.*)\.box\.com\/(.*)/.test(url);
 }
 
-async function getLinkAndFilename(link, currentDate){
+async function singleDownload(link, currentDate){
     let realTitle = "";
     win.webContents.send('status', `Scraping`);
     const browser = await puppeteer.launch({
@@ -25,7 +26,7 @@ async function getLinkAndFilename(link, currentDate){
     win.webContents.send('status', `Title: ${realTitle}`);
     const networkRequestsStr = await page.evaluate('JSON.stringify(window.performance.getEntries())');
     await browser.close();
-    
+
     const networkRequests = JSON.parse(networkRequestsStr);
     let downloadUrl = "";
     for(let j = 0; j < networkRequests.length; j++){
@@ -61,6 +62,11 @@ async function handleDownload(event, ...args){
         return;
     }
 
+    if(downloading){
+        win.webContents.send('status', 'Download is in progress.');
+        return;
+    }
+
     const links = args[0].split(/\s/);
     let allLinksValid = false;
 
@@ -77,15 +83,18 @@ async function handleDownload(event, ...args){
         return;
     }
 
+    downloading = true;
+
     for(let i = 0; i < links.length; i++){
         try{
-            await getLinkAndFilename(links[i], currentDate);
+            await singleDownload(links[i], currentDate);
         }catch(e){
             continue;
         }
     }
 
     win.webContents.send('status', 'Ready.');
+    downloading = false;
 }
 
 function createWindow(){
