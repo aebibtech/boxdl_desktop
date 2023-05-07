@@ -12,8 +12,13 @@ This application can scrape and download protected docx, pdf files in box.com an
 #### Debian/Ubuntu
 Coming soon...
 
-# macOS
+#### macOS
 Coming soon...
+
+### Usage
+1. Run the app.
+2. Paste your box.com links.
+3. Press Download. Downloaded files go to the Downloads folder.
 
 ### Development
 
@@ -22,6 +27,7 @@ Make a change in your file and instantanously see your updates!
 
 ### Todos
  - Write Tests
+ - Change download directory
  - Parallel Downloads
  - Table View for Links
  - Checkout the source code to know more
