@@ -1,7 +1,7 @@
 {
   "name": "boxdl-desktop",
   "productName": "Box Downloader",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Desktop app that scrapes and downloads Box.com protected files",
   "main": "main.js",
   "scripts": {
