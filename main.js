@@ -97,6 +97,10 @@ async function handleDownload(event, ...args){
     downloading = false;
 }
 
+function handleChangeLocation(){
+    
+}
+
 function createWindow(){
     win = new BrowserWindow({
         width: 450,
@@ -121,6 +125,7 @@ app.whenReady().then(function(){
     ipcMain.handle('open-folder', async function(){
         await shell.openPath(app.getPath('downloads'));
     });
+    ipcMain.handle('change-location', handleChangeLocation);
     app.on('activate', function(){
         if(BrowserWindow.getAllWindows().length === 0){
             createWindow();

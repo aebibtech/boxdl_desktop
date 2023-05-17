@@ -13,9 +13,12 @@
     </head>
     <body>
         <main class="container-fluid bg-dark text-light p-3">
-            <h1 class="mb-3 display-1"><samp>BoxDL</samp></h1>
+            <form>
+                <label class="form-label" for="download-location">Download location:</label>
+                <input class="form-control" type="text" name="Download location" id="download-location" disabled value="C:\Users\User\Downloads">
+            </form>
             <form style="height: 285px;">
-                <label class="form-label mb-3" for="links">Paste box.com links here (Separate by space or new line)</label>
+                <label class="form-label mt-3" for="links">Paste box.com links here (Separate by space or new line)</label>
                 <textarea class="mb-3 form-control resize-none h-50" name="links" id="links"></textarea>
                 <div class="d-flex justify-content-between">
                     <button class="btn btn-secondary" type="submit" id="download-btn">Download</button>
