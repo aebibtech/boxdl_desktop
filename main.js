@@ -1,12 +1,36 @@
 if (require('electron-squirrel-startup')) return;
 
-const { app, BrowserWindow, ipcMain, dialog, shell, Notification } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const path = require('path');
-const puppeteer = require('puppeteer');
+const fs = require('fs');
+const puppeteer = require('puppeteer-core');
 const { download } = require('electron-dl');
 
 let win = null;
 let downloading = false;
+
+function getBrowserPath(){
+    const isWin32 = process.platform == "win32";
+    const edgePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
+    const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+    const unixPath = "/usr/bin/chrome";
+    if(isWin32 && fs.existsSync(chromePath)){
+        return chromePath;
+    }
+    if(isWin32 && fs.existsSync(edgePath)){
+        return edgePath;
+    }
+    return unixPath;
+}
+
+function getDownloadLink(networkRequests){
+    for(let j = 0; j < networkRequests.length; j++){
+        if(((networkRequests[j].name.includes("public.boxcloud.com/api/2.0/files") || "dl.boxcloud.com/api/2.0/files") && networkRequests[j].name.includes("content?preview=true")) || (networkRequests[j].name.includes("internal_files") && networkRequests[j].name.includes("pdf"))){
+            return networkRequests[j].name;
+        }
+    }
+    return "";
+}
 
 function urlChecker(url){
     return /https:\/\/(.*)\.box\.com\/(.*)/.test(url);
@@ -17,7 +41,9 @@ async function singleDownload(link, currentDate){
     win.webContents.send('status', `Scraping`);
     const browser = await puppeteer.launch({
         headless: 'new',
-        timeout: 0
+        timeout: 0,
+        executablePath: getBrowserPath(),
+        channel: "chrome"
     });
     const page = await browser.newPage();
     await page.goto(link, { waitUntil: "networkidle0" });
@@ -28,13 +54,8 @@ async function singleDownload(link, currentDate){
     await browser.close();
 
     const networkRequests = JSON.parse(networkRequestsStr);
-    let downloadUrl = "";
-    for(let j = 0; j < networkRequests.length; j++){
-        if(((networkRequests[j].name.includes("public.boxcloud.com/api/2.0/files") || "dl.boxcloud.com/api/2.0/files") && networkRequests[j].name.includes("content?preview=true")) || (networkRequests[j].name.includes("internal_files") && networkRequests[j].name.includes("pdf")) ){
-            downloadUrl = networkRequests[j].name;
-            break;
-        }
-    }
+    let downloadUrl = getDownloadLink(networkRequests);
+    
     
     return new Promise((resolve, reject) => {
         if(downloadUrl !== ""){
