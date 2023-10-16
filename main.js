@@ -155,7 +155,8 @@ function createWindow(){
     win.removeMenu();
 }
 
-app.whenReady().then(function(){
+(async function(){
+    await app.whenReady();
     if(process.platform === 'win32'){
         app.setAppUserModelId("com.aebibtech.boxdl");
     }
@@ -169,7 +170,7 @@ app.whenReady().then(function(){
             createWindow();
         }
     });
-});
+})();
 
 app.on('window-all-closed', function(){
     if(process.platform !== 'darwin'){
