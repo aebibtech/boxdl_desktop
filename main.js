@@ -11,14 +11,26 @@ let downloading = false;
 
 function getBrowserPath(){
     const isWin32 = process.platform == "win32";
+    const isLinux = process.platform == "linux";
+    const firefoxPath = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
     const edgePath = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
     const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
     const unixPath = "/usr/bin/chrome";
+    const linuxFireFoxPath = "/usr/bin/firefox";
     if(isWin32 && fs.existsSync(chromePath)){
         return chromePath;
     }
     if(isWin32 && fs.existsSync(edgePath)){
         return edgePath;
+    }
+    if(isWin32 && fs.existsSync(firefoxPath)){
+        return firefoxPath;
+    }
+    if(isLinux && fs.existsSync(unixPath)){
+        return unixPath;
+    }
+    if(isLinux && fs.existsSync(linuxFireFoxPath)){
+        return linuxFireFoxPath;
     }
     return unixPath;
 }
@@ -38,15 +50,25 @@ function urlChecker(url){
 
 async function singleDownload(link, currentDate){
     let realTitle = "";
+    const executablePath = getBrowserPath();
     win.webContents.send('status', `Scraping`);
-    const browser = await puppeteer.launch({
-        headless: 'new',
+    const browser = !executablePath.includes("firefox") ? await puppeteer.launch({
+        headless: "new",
         timeout: 0,
-        executablePath: getBrowserPath(),
+        executablePath: executablePath,
         channel: "chrome"
+    }) : await puppeteer.launch({
+        product: "firefox",
+        executablePath: executablePath,
+        headless: "true",
+        timeout: 0
     });
     const page = await browser.newPage();
-    await page.goto(link, { waitUntil: "networkidle0" });
+    if(!executablePath.includes("firefox")){
+        await page.goto(link, { waitUntil: "networkidle0" });
+    }else{
+        await page.goto(link, { waitUntil: "domcontentloaded" });
+    }
     const title = await page.title();
     realTitle = title.includes("|") ? title.slice(0, title.indexOf("|") - 1) + currentDate : realTitle;
     win.webContents.send('status', `Title: ${realTitle}`);
