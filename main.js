@@ -155,7 +155,23 @@ function createWindow(){
     win.removeMenu();
 }
 
-app.whenReady().then(function(){
+// app.whenReady().then(function(){
+//     if(process.platform === 'win32'){
+//         app.setAppUserModelId("com.aebibtech.boxdl");
+//     }
+//     createWindow();
+//     ipcMain.handle('download', handleDownload);
+//     ipcMain.handle('open-folder', async function(){
+//         await shell.openPath(app.getPath('downloads'));
+//     });
+//     app.on('activate', function(){
+//         if(BrowserWindow.getAllWindows().length === 0){
+//             createWindow();
+//         }
+//     });
+// });
+(async function(){
+    await app.whenReady();
     if(process.platform === 'win32'){
         app.setAppUserModelId("com.aebibtech.boxdl");
     }
@@ -169,7 +185,7 @@ app.whenReady().then(function(){
             createWindow();
         }
     });
-});
+})();
 
 app.on('window-all-closed', function(){
     if(process.platform !== 'darwin'){
